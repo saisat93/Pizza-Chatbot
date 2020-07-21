@@ -168,7 +168,7 @@ def get_bot_response():
     global connection;
     global cur;
 
-   check_order_status()
+    check_order_status()
 
     userText = request.args.get('msg').lower()
     user_input=userText.split()
