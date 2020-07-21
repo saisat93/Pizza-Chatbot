@@ -17,7 +17,7 @@ app.static_folder = 'static'
 #cur = None
 connection = psycopg2.connect(user = "postgres",password = "123",host = "127.0.0.1",port = "5432",database = "postgres")
 cur = connection.cursor()
-app.config['SQLALLCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost/postgres'
+app.config['SQLALLCHEMY_DATABASE_URI'] = 'postgres://qkuegbuqampmav:bbd55ba8f536da4bf35bd04aae686e29a5354c6f47ad628d9d2cbba4062fb505@ec2-50-19-26-235.compute-1.amazonaws.com:5432/d8l2o0qtiunehq'
 #except (Exception, psycopg2.Error) as error :
  #   print ("Error while connecting to PostgreSQL", error)
 #finally:
