@@ -17,7 +17,7 @@ chatbot = ChatBot(
             'maximum_similarity_threshold': 0.90
         }
     ],
-   # database_uri='sqlite:///database.sqlite3'
+    #database_uri='sqlite:///database.sqlite3'
 ) 
 
  # Training with Personal Ques & Ans 
