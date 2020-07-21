@@ -9,15 +9,100 @@ import os
 #from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 from psycopg2 import Error
+import urllib.parse as urlparse
+
+
 
 app = Flask(__name__)
 app.static_folder = 'static'
 
 #connection =None
 #cur = None
-connection = psycopg2.connect(user = "postgres",password = "123",host = "127.0.0.1",port = "5432",database = "postgres")
+
+os.environ['DATABASE_URL'] = 'postgres://qkuegbuqampmav:bbd55ba8f536da4bf35bd04aae686e29a5354c6f47ad628d9d2cbba4062fb505@ec2-50-19-26-235.compute-1.amazonaws.com:5432/d8l2o0qtiunehq'
+
+url = urlparse.urlparse(os.environ['DATABASE_URL'])
+dbname = url.path[1:]
+user = url.username
+password = url.password
+host = url.hostname
+port = url.port
+
+
+connection = psycopg2.connect(user = user,password = password,host =host,port =port,database = dbname)
 cur = connection.cursor()
-app.config['SQLALLCHEMY_DATABASE_URI'] = 'postgres://qkuegbuqampmav:bbd55ba8f536da4bf35bd04aae686e29a5354c6f47ad628d9d2cbba4062fb505@ec2-50-19-26-235.compute-1.amazonaws.com:5432/d8l2o0qtiunehq'
+
+def create_tables():
+    sql = "CREATE TABLE non_veg\
+        (\
+            id integer NOT NULL,\
+            price integer,\
+            name text COLLATE pg_catalog.\"default\",\
+            CONSTRAINT non_veg_pkey PRIMARY KEY (id)\
+        )"
+    cur.execute(sql)
+    connection.commit()
+
+    sql = "CREATE TABLE veg_list\
+        (\
+            id integer NOT NULL,\
+            price integer,\
+            name text COLLATE pg_catalog.\"default\",\
+            CONSTRAINT veg_list_pkey PRIMARY KEY (id)\
+        )"
+    cur.execute(sql)
+    connection.commit()
+
+    sql = "CREATE TABLE user_details\
+        (\
+            id text COLLATE pg_catalog.\"default\" NOT NULL,\
+            name text COLLATE pg_catalog.\"default\",\
+            street text COLLATE pg_catalog.\"default\",\
+            place text COLLATE pg_catalog.\"default\",\
+            phone text COLLATE pg_catalog.\"default\",\
+            category text COLLATE pg_catalog.\"default\",\
+            food text COLLATE pg_catalog.\"default\",\
+            \"time\" timestamp without time zone,\
+            status text COLLATE pg_catalog.\"default\",\
+            CONSTRAINT user_details_pkey PRIMARY KEY (id)\
+        )"
+    cur.execute(sql)
+    connection.commit()
+
+
+    sql ="""INSERT INTO non_veg(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (1,250,"Chicken Pizza",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+    sql ="""INSERT INTO non_veg(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (2,450,"BBQ Chicken Pizza",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+    sql ="""INSERT INTO non_veg(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (3,530,"Ham and Cheese Pizza",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+    sql ="""INSERT INTO veg_list(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (1,380,"Veggie Delight",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+    sql ="""INSERT INTO veg_list(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (2,450,"Margerita",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+    sql ="""INSERT INTO veg_list(id,price,name) VALUES(%s,%s,%s)"""
+    record_to_insert = (3,490,"Spinach Delight",)
+    cur.execute(sql,record_to_insert)
+    connection.commit()
+
+
+
+
 #except (Exception, psycopg2.Error) as error :
  #   print ("Error while connecting to PostgreSQL", error)
 #finally:
@@ -83,7 +168,7 @@ def get_bot_response():
     global connection;
     global cur;
 
-   # check_order_status()
+   check_order_status()
 
     userText = request.args.get('msg').lower()
     user_input=userText.split()
@@ -433,4 +518,5 @@ def is_empty(any_structure):
         return True
 
 if __name__ == "__main__":
+    # create_tables()
     app.run() 
