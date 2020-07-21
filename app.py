@@ -53,7 +53,7 @@ def get_bot_response():
  
     global myresult;
 
-    #check_order_status()
+    check_order_status()
 
     userText = request.args.get('msg').lower()
     user_input=userText.split()
@@ -120,31 +120,64 @@ def check_order_status():
         rem_time = current_time-order_time
         time_diff =rem_time.seconds/60
         print(time_diff)
+        print(type(time_diff))
         if time_diff <= 15:
-            cur=mysql.connection.cursor()
-            sql = "UPDATE user_details SET status = 'Preparation started' WHERE id = %s"
-            cur.execute(sql,myresult[i]['id'])
-            mysql.connection.commit()
+            try:
+                cur=mysql.connection.cursor()
+                sql = "UPDATE user_details SET status = 'Preparation started' WHERE id = %s"
+                cur.execute(sql,(myresult[i]['id'],))
+                mysql.connection.commit()
+            except Exception as ex:
+                print(ex)            
+            
         if time_diff >15 and time_diff <= 30:
-            cur=mysql.connection.cursor()
-            sql = "UPDATE user_details SET status = 'Pizza Cooking' WHERE id = %s"
-            cur.execute(sql,myresult[i]['id'])
-            mysql.connection.commit()
-        if time_diff > 30 and time_diff <= 45: 
-            cur=mysql.connection.cursor()
-            sql = "UPDATE user_details SET status = 'Cooking Finished' WHERE id = %s"
-            cur.execute(sql,myresult[i]['id'])
-            mysql.connection.commit()
+            try:
+                cur=mysql.connection.cursor()
+                sql = "UPDATE user_details SET status = 'Pizza Cooking' WHERE id = %s"
+                cur.execute(sql,(myresult[i]['id'],))
+                mysql.connection.commit()
+            except Exception as ex:
+                print(ex)
+            # cur=mysql.connection.cursor()
+            # sql = "UPDATE user_details SET status = 'Pizza Cooking' WHERE id = %s"
+            # cur.execute(sql,myresult[i]['id'])
+            # mysql.connection.commit()
+        if time_diff > 30 and time_diff <= 45:
+            try:
+                cur=mysql.connection.cursor()
+                sql = "UPDATE user_details SET status = 'Cooking Finished' WHERE id = %s"
+                cur.execute(sql,(myresult[i]['id'],))
+                mysql.connection.commit()
+            except Exception as ex:
+                print(ex) 
+            # cur=mysql.connection.cursor()
+            # sql = "UPDATE user_details SET status = 'Cooking Finished' WHERE id = %s"
+            # cur.execute(sql,myresult[i]['id'])
+            # mysql.connection.commit()
         if time_diff > 45 and time_diff <=60:
-            cur=mysql.connection.cursor()
-            sql = "UPDATE user_details SET status = 'Out for Delivery' WHERE id = %s"
-            cur.execute(sql,myresult[i]['id'])
-            mysql.connection.commit()
+            try:
+                cur=mysql.connection.cursor()
+                sql = "UPDATE user_details SET status = 'Out for Delivery' WHERE id = %s"
+                cur.execute(sql,(myresult[i]['id'],))
+                mysql.connection.commit()
+            except Exception as ex:
+                print(ex)
+            # cur=mysql.connection.cursor()
+            # sql = "UPDATE user_details SET status = 'Out for Delivery' WHERE id = %s"
+            # cur.execute(sql,myresult[i]['id'])
+            # mysql.connection.commit()
         if time_diff >60:
-            cur=mysql.connection.cursor()
-            sql = "UPDATE user_details SET status = 'Pizza Delivered' WHERE id = %s"
-            cur.execute(sql,myresult[i]['id'])
-            mysql.connection.commit()
+            try:
+                cur=mysql.connection.cursor()
+                sql = "UPDATE user_details SET status = 'Pizza Delivered' WHERE id = %s"
+                cur.execute(sql,(myresult[i]['id'],))
+                mysql.connection.commit()
+            except Exception as ex:
+                print(ex)
+            # cur=mysql.connection.cursor()
+            # sql = "UPDATE user_details SET status = 'Pizza Delivered' WHERE id = %s"
+            # cur.execute(sql,myresult[i]['id'])
+            # mysql.connection.commit()
     return 0
 
 def  user_details():
