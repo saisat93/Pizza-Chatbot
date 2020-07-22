@@ -221,7 +221,7 @@ def check_order_status():
     global connection;
     global cur;
 
-    sql = 'select id,time from user_details where status != "Pizza Delivered"'
+    sql = "select id,time from user_details where status != \"Pizza Delivered\""
     cur.execute(sql)
     myresult =cur.fetchall()
     connection.commit()
