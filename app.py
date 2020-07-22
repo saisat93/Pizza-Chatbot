@@ -15,7 +15,6 @@ import urllib.parse as urlparse
 
 app = Flask(__name__)
 app.static_folder = 'static'
-server = app.server
 
 #connection =None
 #cur = None
