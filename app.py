@@ -16,7 +16,7 @@ import urllib.parse as urlparse
 app = Flask(__name__)
 app.static_folder = 'static'
 
-#connection =None
+#connection =None 
 #cur = None
 
 os.environ['DATABASE_URL'] = 'postgres://qkuegbuqampmav:bbd55ba8f536da4bf35bd04aae686e29a5354c6f47ad628d9d2cbba4062fb505@ec2-50-19-26-235.compute-1.amazonaws.com:5432/d8l2o0qtiunehq'
@@ -27,6 +27,7 @@ user = url.username
 password = url.password
 host = url.hostname
 port = url.port
+
 
 
 connection = psycopg2.connect(user = user,password = password,host =host,port =port,database = dbname)
