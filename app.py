@@ -222,19 +222,20 @@ def check_order_status():
     global connection;
     global cur;
 
-    sql = "select id,time from user_details where status != \"Pizza Delivered\""
+    sql = "select id,time from user_details where status != 'Pizza Delivered'"
     cur.execute(sql)
     myresult =cur.fetchall()
     connection.commit()
     current_time = datetime.now()
     print("##############")
     print(len(myresult))
+    print(myresult)
     for i in range(0,len(myresult)):
-        print(myresult[i]['time'])
-        print(type(myresult[i]['time']))
-        print(myresult[i]['id'])
-        print(type(myresult[i]['id']))
-        order_time = myresult[i]['time']
+        print(myresult[i])
+        print(type(myresult[i]))
+        # print(myresult[i])
+        print(type(myresult[i][0]))
+        order_time = myresult[i][1]
         rem_time = current_time-order_time
         time_diff =rem_time.seconds/60
         print(time_diff)
@@ -242,7 +243,7 @@ def check_order_status():
         if time_diff <= 15:
             try:
                 sql = "UPDATE user_details SET status = 'Preparation started' WHERE id = %s"
-                cur.execute(sql,(myresult[i]['id'],))
+                cur.execute(sql,(myresult[i][0],))
                 connection.commit()
             except Exception as ex:
                 print(ex)            
@@ -250,7 +251,7 @@ def check_order_status():
         if time_diff >15 and time_diff <= 30:
             try:
                 sql = "UPDATE user_details SET status = 'Pizza Cooking' WHERE id = %s"
-                cur.execute(sql,(myresult[i]['id'],))
+                cur.execute(sql,(myresult[i][0],))
                 connection.commit()
             except Exception as ex:
                 print(ex)
@@ -261,7 +262,7 @@ def check_order_status():
         if time_diff > 30 and time_diff <= 45:
             try:
                 sql = "UPDATE user_details SET status = 'Cooking Finished' WHERE id = %s"
-                cur.execute(sql,(myresult[i]['id'],))
+                cur.execute(sql,(myresult[i][0],))
                 connection.commit()
             except Exception as ex:
                 print(ex) 
@@ -272,7 +273,7 @@ def check_order_status():
         if time_diff > 45 and time_diff <=60:
             try:
                 sql = "UPDATE user_details SET status = 'Out for Delivery' WHERE id = %s"
-                cur.execute(sql,(myresult[i]['id'],))
+                cur.execute(sql,(myresult[i][0],))
                 connection.commit()
             except Exception as ex:
                 print(ex)
@@ -283,7 +284,7 @@ def check_order_status():
         if time_diff >60:
             try:
                 sql = "UPDATE user_details SET status = 'Pizza Delivered' WHERE id = %s"
-                cur.execute(sql,(myresult[i]['id'],))
+                cur.execute(sql,(myresult[i][0],))
                 connection.commit()
             except Exception as ex:
                 print(ex)
