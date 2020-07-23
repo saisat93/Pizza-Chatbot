@@ -187,9 +187,11 @@ def get_bot_response():
         if user_input[i] == 'veg':
             return veg_list_category()
 
-        if user_input[i] == 'non'or user_input[i] == 'non-veg' or user_input[i] == 'nonveg':
+        if user_input[i] == 'non' or user_input[i] == 'non-veg' or user_input[i] == 'nonveg':
            return non_veg_list_category()
 
+    if flag == '':
+        return "Im still learning to communicate"
 
     if flag =='details':
         return split_user_details(userText)
@@ -226,6 +228,8 @@ def check_order_status():
     cur.execute(sql)
     myresult =cur.fetchall()
     connection.commit()
+    if is_empty(myresult):
+        return 0
     current_time = datetime.now()
     print("##############")
     print(len(myresult))
@@ -374,7 +378,7 @@ def veg_list_category():
         print(myresult[i][0])
         print(type(myresult[i][0]))
         veg_list += "Name: " + myresult[i][0] + ","
-    return "Enter the name of the pizza:" + veg_list
+    return "Enter only the name of the pizza (One at a time ) :" + veg_list
 
 def non_veg_list_category():
     #-----------
@@ -400,9 +404,9 @@ def non_veg_list_category():
     myresult =cur.fetchall()
     for i in range(0,len(myresult)):
         nv_list += "Name: " + myresult[i][0] + ","
-    return "Enter the name of the pizza:" + nv_list
+    return "Enter only the name of the pizza (one at a time):" + nv_list
             
-def veg_after_ordering(flag,user_input):
+def veg_after_ordering(variety,user_input):
     #push into db of the upcoming data as pizza item 
     #-----------
     #Description 
@@ -428,6 +432,7 @@ def veg_after_ordering(flag,user_input):
     global user_id;
     global connection;
     global cur;
+    global flag;
 
     current_time = datetime.now()
     status ='Order Received' 
@@ -437,7 +442,8 @@ def veg_after_ordering(flag,user_input):
     record_to_insert = (user_id,name,street,place,flag,user_input,status,current_time,phone,)
     cur.execute(sql,record_to_insert)
     connection.commit()
-    myresult = "Your order id is :" + user_id + "    "+ '. ' + "Order on" + flag +" placed. " + "    " + 'To know about the status enter "status"!!!'
+    myresult = "Your order id is : " + user_id + "    "+ '. ' + "Order on " + variety +" placed. " + "    " + 'To know about the status enter "status"!!!'
+    flag = '' 
     return myresult
 
 
@@ -459,12 +465,15 @@ def order_status_by_user(user_input):
     #This returns the status of the food 
     global connection;
     global cur;
+    global flag;
 
+    flag =''
     sql = 'select time from user_details where id=%s'
     cur.execute(sql,user_input)
     myresult =cur.fetchall()
     connection.commit()
     if is_empty(myresult):
+        flag =''
         return "Invalid order ID"
     current_time = datetime.now()
     order_time = myresult[0][0]
